@@ -174,9 +174,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Contributors who help improve this project
 
 ## Contact
-- Project Maintainer: [Your Name]
-- Email: [your.email@example.com]
-- GitHub: [@yourusername]
+- Project Maintainer: Puneet
+- Email: puneetchandilya@gmail.com]
+- GitHub: @puneetkumar74
 
 ## Version History
 - **v1.0.0** - Initial release with basic functionality
