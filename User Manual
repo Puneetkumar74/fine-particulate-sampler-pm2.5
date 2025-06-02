@@ -1,0 +1,282 @@
+# User Manual - Fine Particulate Sampler PM 2.5 MFC
+
+## Table of Contents
+1. [Getting Started](#getting-started)
+2. [Device Overview](#device-overview)
+3. [Operation Guide](#operation-guide)
+4. [Menu System](#menu-system)
+5. [Data Management](#data-management)
+6. [Maintenance](#maintenance)
+7. [Troubleshooting](#troubleshooting)
+
+## Getting Started
+
+### Initial Power-On
+1. Connect the power supply to your Arduino Mega
+2. The device will display the startup screen:
+   ```
+   GREENTECHINSTRUMENTS
+     FINE PARTICULATE
+         SAMPLAR
+       PM 2.5 MFC
+   ```
+3. After 1 second, the home screen will appear with live sensor readings
+
+### First Time Setup
+1. **Check RTC Time**: Access the menu and verify the current time is correct
+2. **Test SD Card**: Ensure the SD card is properly inserted and formatted
+3. **Verify Sensors**: Check that all sensor readings appear reasonable
+
+## Device Overview
+
+### Display Layout
+The main screen shows real-time measurements in this format:
+```
+Line 0: GREENTECHINSTRUMENTS
+Line 1: FR:XX.XX L/M  V:XXX.XX L
+Line 2: AT:XX.XX°C   FT:XX.XX°C
+Line 3: BT:XX.XX°C   BP:XXXX.XXh
+```
+
+Where:
+- **FR**: Flow Rate (Liters per Minute)
+- **V**: Total Volume (Liters)
+- **AT**: Ambient Temperature from DHT11 (°C)
+- **FT**: Filter Temperature from DHT11 (°C)
+- **BT**: BMP180 Temperature (°C)
+- **BP**: Barometric Pressure (hPa)
+
+### Button Functions
+- **Back (Pin 2)**: Return to home screen or exit current menu
+- **Up (Pin 3)**: Navigate up in menus or increase values
+- **Down (Pin 4)**: Navigate down in menus or decrease values
+- **Enter (Pin 5)**: Select menu items or confirm settings
+
+## Operation Guide
+
+### Normal Operation
+1. **Power On**: The device automatically starts measuring and displaying data
+2. **Data Logging**: Every 60 seconds, data is saved to the SD card
+3. **Continuous Monitoring**: The display updates every 3 seconds
+4. **Volume Tracking**: The system continuously calculates total air volume sampled
+
+### Starting a Sampling Session
+1. Press any button to access the menu
+2. Navigate to "Offset" to set a timer
+3. Configure your desired sampling duration
+4. Press Enter three times to start the timer and activate the relay
+
+### Stopping a Session
+1. Access the "Offset" menu
+2. Press Enter three times to stop the timer
+3. The relay will deactivate automatically
+
+## Menu System
+
+### Main Menu
+Access by pressing any button from the home screen:
+```
+Menu:
+>Time
+ Offset
+ Data Download
+```
+
+### Menu Navigation
+- Use **Up/Down** buttons to navigate between options
+- Press **Enter** to select an option
+- Press **Back** to return to the home screen
+
+### Time Menu
+Displays current date and time from the RTC module:
+```
+Set Time
+Date: 2025/03/08
+Time: 17:45:32
+```
+
+### Offset Menu (Timer Control)
+Configure and control the sampling timer:
+
+1. **Setting Timer Duration**:
+   - Use **Up** button to increase time
+   - Press **Enter** twice to cycle between seconds, minutes, and hours
+   - The display shows which unit you're currently adjusting
+
+2. **Starting the Timer**:
+   - Press **Enter** three times to start
+   - The relay activates and begins the sampling process
+   - Display shows remaining time
+
+3. **Timer Display**:
+   ```
+   TT: 01:23:45    (Total Time elapsed)
+   Running: 00:15:30  (Time remaining)
+   Set Timer: 00:30:00
+   Setting: Minutes
+   ```
+
+### Data Download Menu
+Export logged data from the SD card:
+```
+Download Data?
+>Yes
+ No
+```
+- Select "Yes" to initiate data transfer
+- The system will display "Downloading..." followed by "Download Complete"
+
+## Data Management
+
+### Data Format
+Data is saved in CSV format with the following structure:
+```csv
+Timestamp,Temperature(BMP180),Pressure,AT(DHT11),FT(DHT11),Flow Rate,Volume
+2025/03/08 17:45:32,25.30,1013.25,24.00,23.50,5.67,125.45
+```
+
+### File Location
+- **Filename**: `datalog.csv`
+- **Location**: Root directory of SD card
+- **Format**: Standard CSV (Comma Separated Values)
+
+### Data Retrieval
+1. **Via SD Card**: Remove SD card and read on computer
+2. **Via Serial**: Connect to computer and monitor serial output
+3. **Via Download Menu**: Use the built-in download function
+
+### Data Analysis
+The CSV file can be opened in:
+- Microsoft Excel
+- Google Sheets
+- Any data analysis software (R, Python, MATLAB)
+- Text editors for raw viewing
+
+## Maintenance
+
+### Regular Maintenance
+1. **Weekly**:
+   - Check SD card space
+   - Verify sensor readings are reasonable
+   - Clean LCD screen
+
+2. **Monthly**:
+   - Backup data from SD card
+   - Check all connections
+   - Verify RTC time accuracy
+
+3. **As Needed**:
+   - Replace SD card if full
+   - Clean sensor housings
+   - Check power supply stability
+
+### Sensor Care
+- **BMP180**: Keep dry, avoid physical damage
+- **DHT11**: Protect from direct moisture
+- **ADP2100**: Keep air path clear of obstructions
+- **LCD**: Clean with soft, dry cloth only
+
+### SD Card Management
+- Use high-quality SD cards (Class 10 recommended)
+- Format as FAT32
+- Regular backup prevents data loss
+- Replace when showing errors
+
+## Troubleshooting
+
+### Display Issues
+**Blank LCD Screen**:
+- Check power connections
+- Verify I2C address (0x27)
+- Adjust contrast if available
+
+**Garbled Text**:
+- Check I2C wiring (SDA/SCL)
+- Verify 5V power supply
+- Reset Arduino
+
+### Sensor Problems
+**No Sensor Readings**:
+- Check I2C connections
+- Verify sensor addresses
+- Test sensors individually
+
+**Unrealistic Values**:
+- Check sensor positioning
+- Verify environmental conditions
+- Recalibrate if necessary
+
+### Data Logging Issues
+**No SD Card Data**:
+- Format SD card as FAT32
+- Check CS pin connection (Pin 53)
+- Verify SD card is not write-protected
+
+**Incomplete Data**:
+- Check SD card space
+- Verify stable power supply
+- Monitor for system resets
+
+### Timer/Relay Problems
+**Relay Not Activating**:
+- Check relay connections
+- Verify relay module power
+- Test relay independently
+
+**Timer Not Working**:
+- Check button connections
+- Verify menu navigation
+- Reset timer settings
+
+### Recovery Procedures
+**System Freeze**:
+1. Power cycle the device
+2. Check for loose connections
+3. Re-upload firmware if necessary
+
+**Data Corruption**:
+1. Format new SD card
+2. Copy code to backup
+3. Start fresh data collection
+
+**Sensor Failures**:
+1. Identify failing sensor
+2. Check connections first
+3. Replace sensor if necessary
+
+## Advanced Features
+
+### Serial Communication
+- **Baud Rate**: 9600
+- **Data Output**: Real-time sensor readings
+- **Format**: Same as SD card CSV format
+
+### Customization Options
+- Modify data logging intervals
+- Adjust sensor calibration factors
+- Change display update rates
+- Customize menu options
+
+### Integration Possibilities
+- Connect to external data loggers
+- Interface with computer systems
+- Network connectivity (with additional modules)
+- Remote monitoring capabilities
+
+## Safety Considerations
+
+### Electrical Safety
+- Use appropriate power supplies
+- Avoid water near electronics
+- Check connections regularly
+- Use proper grounding
+
+### Environmental Monitoring
+- Understand measurement limitations
+- Calibrate sensors appropriately
+- Consider environmental factors
+- Validate results when possible
+
+---
+
+For additional support or questions not covered in this manual, please refer to the project repository or contact the maintainer.
